@@ -7,36 +7,31 @@ Currently, the kernel is extremely minimal and can only display text on the scre
 ## Compile and Run
 In order to compile, a gcc cross-compiler must be set up for i686-elf. Then:
 To Compile:
-First, assemble the bootloader:
 ```
-i686-elf-as boot.s -o boot.o
-```
-Second, compile the kernel:
-```
-i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-```
-Third, link the two:
-```
-i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
+make bin
 ```
 
-To check if the OS is bootable, run:
+To make ISO:
 ```
-grub-file --is-x86-multiboot myos.bin
-echo $?
+make iso
 ```
-If the output is 0, the multiboot is working. If the output is 1, there was an error.
 
-To Run:
-Make a bootable iso:
+To do both at once:
 ```
-mkdir -p isodir/boot/grub
-cp myos.bin isodir/boot/myos.bin
-cp grub.cfg isodir/boot/grub/grub.cfg
-grub-mkrescue -o myos.iso isodir
+make all
 ```
 
 Run the iso using qemu:
 ```
 qemu-system-i386 -cdrom myos.iso
+```
+
+## Cleanup
+To cleanup unnecessary files but leave the ISO, run:
+```
+make clean
+```
+To remove all generated files including the ISO, run:
+```
+make clean_all
 ```
